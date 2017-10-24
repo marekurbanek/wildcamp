@@ -1,0 +1,8 @@
+.jumbotron{
+	padding: 20px 40px;
+}
+
+#wraping{
+	display: flex; 
+	flex-wrap: wrap;
+}
