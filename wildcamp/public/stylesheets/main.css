@@ -6,3 +6,6 @@
 	display: flex; 
 	flex-wrap: wrap;
 }
+.img-responsive{
+	max-width: 100%;
+}

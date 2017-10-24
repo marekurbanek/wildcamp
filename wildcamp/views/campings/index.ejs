@@ -22,15 +22,15 @@
 </div>
 <div class="row text-center" id="wraping">
  <% camping.forEach(function(camp){ %>
-	<div class="col-md-3">
-	<div class="img-rounded img-responsive">
-		<%= camp.image %>		
-	</div>
-	<div class="caption">
-		<h4><%= camp.name %></h4>
-	</div>
-	
-	<%= camp.description %>
+	<div class="col-md-4 col-sm-6">
+		<div class="thumbnail">
+			<a href="/campings/<%= camp._id%>">
+				<img class="img-responsive" src="<%= camp.image %>">
+			</a>		
+			<div class="caption">
+				<h4><%= camp.name %></h4>
+			</div>
+		</div>
 	</div>
 <% }); %> 
 </div>

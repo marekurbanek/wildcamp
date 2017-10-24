@@ -1,0 +1,12 @@
+<%  include ../partials/header %>
+	<div class="container-fluid">
+		<h3>Edit <%=camping.name%> </h3>
+		<form id="campingForm" action="/campings/<%=camping._id%>?_method=PUT" method="POST">
+			<input type="text" name="camping[name]" value="<%=camping.name%>">
+			<input type="text" name="camping[image]" value="<%=camping.image%>">
+			<!-- <input type="text" name="camping[description]" value="<%=camping.description%>"> -->
+			<textarea name="camping[description]"><%=camping.description%></textarea>
+			<input type="submit" value="Submit!">
+		</form>
+	</div>
+<% include ../partials/footer %>

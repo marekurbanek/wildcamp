@@ -6,12 +6,13 @@ var express					= require("express"),
 	LocalStrategy			= require("passport-local"),
 	passportLocalMongoose	= require("passport-local-mongoose"),
 	Camping 				= require("./models/camping"),
-	User					= require("./models/user")
+	User					= require("./models/user"),
+	methodOverride 			= require("method-override")
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
-
+app.use(methodOverride("_method"));
 
 mongoose.connect('mongodb://localhost/app');
 var db = mongoose.connection;
@@ -49,6 +50,41 @@ app.post("/campings", function(req, res){
 		}
 	});
 });
+
+app.get("/campings/:id", function(req, res){
+	Camping.findById(req.params.id, function(err, foundCamp){
+		if(err){
+			console.log(err);
+			res.send("I couldn't find that camping");
+		}
+		else{
+			res.render("campings/show", {camping: foundCamp});
+		}
+	})
+});
+
+app.get("/campings/:id/edit", function(req, res){
+	Camping.findById(req.params.id, function(err, foundCamp){
+		if(err){
+			console.log(err);
+			res.send("I couldn't find that camp");
+		}else{
+			res.render("campings/edit", {camping: foundCamp});
+		}
+	})
+});
+
+app.put("/campings/:id", function(req, res){
+	Camping.findByIdAndUpdate(req.params.id, req.body.camping, function(err, updatedBlog){
+		if(err){
+			res.redirect("/campings")
+		}else{
+			res.redirect("/campings/" + req.params.id);
+		}
+	})
+});
+
+
 
 app.get("/login", function(req, res){
 	res.render("login");
