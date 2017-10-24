@@ -18,7 +18,24 @@ mongoose.connect('mongodb://localhost/app');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
-  // we're connected!
+});
+
+//PASSPORT CONFIGURATION
+app.use(require("express-session")({
+    secret: "Once again Rusty wins cutest dog",
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+app.use(function(req, res, next){
+    res.locals.currentUser = req.user;
+    next();
 });
 
 
@@ -26,12 +43,15 @@ app.get("/", function(req, res){
 	res.render("landing");
 });
 
+//===========================================================
+//			CAMPING ROUTES
+//===========================================================
 app.get("/campings", function(req, res){
 	Camping.find({}, function(err, allCampings){
 		if(err){
 			console.log(err);
 		} else{
-			res.render("campings/index", {camping: allCampings});
+			res.render("campings/index", {camping: allCampings, currentUser: req.user});
 		}
 	});
 });
@@ -85,16 +105,42 @@ app.put("/campings/:id", function(req, res){
 });
 
 
+//===========================================================
+//			LOGIN ROUTES
+//===========================================================
 
+app.get("/register", function(req, res){
+	res.render("users/register")
+});
+
+app.post("/register", function(req, res){
+	var newUser = new User({username: req.body.username});
+	User.register(newUser, req.body.password, function(err, user){
+		if(err){
+			console.log(err);
+			return res.render("users/register");
+		}
+		passport.authenticate("local")(req, res, function(){
+			res.redirect("/campings");
+		});
+	});
+});
 app.get("/login", function(req, res){
-	res.render("login");
+	res.render("users/login");
 });
 
-app.post("/login", function(req, res){
+app.post("/login", passport.authenticate("local",
+	{
+		successRedirect: "/campings",
+		failureRedirect: "/login"
+	}), function(req, res){
 
 });
 
-
+app.get("/logout", function(req, res){
+	req.logout();
+	res.redirect("/campings");
+});
 
 
 
