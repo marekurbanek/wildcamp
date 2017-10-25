@@ -7,7 +7,8 @@ var express					= require("express"),
 	passportLocalMongoose	= require("passport-local-mongoose"),
 	Camping 				= require("./models/camping"),
 	User					= require("./models/user"),
-	methodOverride 			= require("method-override")
+	methodOverride 			= require("method-override"),
+	Comment 				= require("./models/comment")
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
@@ -70,17 +71,14 @@ app.post("/campings", function(req, res){
 		}
 	});
 });
-
 app.get("/campings/:id", function(req, res){
-	Camping.findById(req.params.id, function(err, foundCamp){
+	Camping.findById(req.params.id).populate("comments").exec(function(err, foundCamp){
 		if(err){
 			console.log(err);
-			res.send("I couldn't find that camping");
-		}
-		else{
+		} else{
 			res.render("campings/show", {camping: foundCamp});
 		}
-	})
+	});
 });
 
 app.get("/campings/:id/edit", function(req, res){
@@ -141,6 +139,45 @@ app.get("/logout", function(req, res){
 	req.logout();
 	res.redirect("/campings");
 });
+
+//===========================================================
+//			COMMENTS ROUTES
+//===========================================================
+
+
+app.get("/campings/:id/comments/new", function(req, res){
+	Camping.findById(req.params.id, function(err, foundCamp){
+		if(err){
+			res.redirect("/campings")
+		} else{
+			res.render("comments/new", {camping: foundCamp});
+		}
+	});
+	
+});
+
+app.post("/campings/:id/comments", function(req, res){
+	Camping.findById(req.params.id, function(err, foundCamp){
+		if(err){
+			console.log(err);
+			res.redirect("/campings");
+		} else{
+			Comment.create(req.body.comment, function(err, comment){
+				if(err){
+					console.log(err);
+					res.redirect("/campings");
+				} else{
+					foundCamp.comments.push(comment);
+					foundCamp.save();
+					res.redirect("/campings/" + foundCamp._id);
+				}
+			}
+		)};
+	});
+});
+
+
+
 
 
 
