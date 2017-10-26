@@ -1,11 +1,20 @@
 <%  include ../partials/header %>
 	<div class="container-fluid">
-		<form id="campingForm" action="/campings" method="POST">
-			<input type="text" name="camping[name]" placeholder="name">
-			<input type="text" name="camping[image]" placeholder="image url">
-	<!-- 		<input type="text" name="camping[description]" placeholder="description"> -->
-			<textarea name="camping[description]"></textarea>
-			<input type="submit" value="Submit!">
-		</form>
+		<div class="row">
+			<div class="col-md-6 offset-md-3 margin-top">
+				<form id="campingForm" action="/campings" method="POST">
+					<div class="form-group">
+						<input class="form-control" type="text" name="camping[name]" placeholder="name">
+					</div>
+					<div class="form-group">
+						<input class="form-control" type="text" name="camping[image]" placeholder="image url">
+					</div>
+					<div class="form-group">
+						<textarea class="form-control" name="camping[description]"></textarea>
+					</div>
+					<input class="btn btn-lg btn-success"type="submit" value="Submit!">
+				</form>
+			</div>
+		</div>
 	</div>
 <% include ../partials/footer %>

@@ -41,3 +41,10 @@ background: linear-gradient(to right, #E9E4F0, #D3CCE3); /* W3C, IE 10+/ Edge, F
 .no-opacity{
 	opacity: 2;
 }
+.img-thumbnail{
+	margin-bottom: 20px
+}
+
+.margin-top{
+	margin-top: 60px;
+}

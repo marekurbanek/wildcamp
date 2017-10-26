@@ -39,6 +39,12 @@ app.use(function(req, res, next){
     next();
 });
 
+function isLoggedIn(req, res, next){
+	if(req.isAuthenticated()){
+		return next();
+	}
+	res.redirect("/login");
+};
 
 app.get("/", function(req, res){
 	res.render("landing");
@@ -61,7 +67,7 @@ app.get("/campings/new", function(req, res){
 	res.render("campings/new")
 });
 
-app.post("/campings", function(req, res){
+app.post("/campings", isLoggedIn, function(req, res){
 	var newCamping = req.body.camping;
 	Camping.create(newCamping, function(err, newCamp){
 		if(err){
@@ -81,7 +87,7 @@ app.get("/campings/:id", function(req, res){
 	});
 });
 
-app.get("/campings/:id/edit", function(req, res){
+app.get("/campings/:id/edit",isLoggedIn, function(req, res){
 	Camping.findById(req.params.id, function(err, foundCamp){
 		if(err){
 			console.log(err);
@@ -156,7 +162,7 @@ app.get("/campings/:id/comments/new", function(req, res){
 	
 });
 
-app.post("/campings/:id/comments", function(req, res){
+app.post("/campings/:id/comments", isLoggedIn, function(req, res){
 	Camping.findById(req.params.id, function(err, foundCamp){
 		if(err){
 			console.log(err);
