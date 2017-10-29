@@ -8,22 +8,27 @@
 			<h3 class="text-center"><%=camping.name %></h3>
 			<hr>
 			<p><%= camping.description%></p>
-			<% if(currentUser){ %>
-			<hr>
-			<a class="btn btn-lg btn-primary" href="/campings/<%=camping._id%>/edit">Edit</a>
-			<a class="btn btn-lg btn-info" href="/campings/<%=camping._id%>/comments/new">Add new comment</a>
+			<p><em>Created by: <%=camping.author.username%></em></p>
+			<% if(currentUser && camping.author.id.equals(currentUser._id)){ %>
+				<hr>
+				<a class="btn  btn-warning btn-xs" href="/campings/<%=camping._id%>/edit">Edit</a>
+				<form id="delete-form" action="/campings/<%=camping._id%>?_method=DELETE" method="POST">
+					<button class="btn btn-danger btn-xs">Delete</button>
+				</form>
 			<% }; %>
 		</div>
 	</div>
 	<hr>
 	<div class="row">
 		<div class="col-md-12 ">
+			<a class="btn btn-lg btn-info" href="/campings/<%=camping._id%>/comments/new">Add new comment</a>
 			<h3>Comments:</h3>
 			<% camping.comments.forEach(function(comment){ %>
 			<div class="img-thumbnail">
-				<h4><strong><%=comment.author%></strong></h4>
+				<h4><strong><%=comment.author.username%></strong></h4>
 				<hr>
 				<p><%=comment.text%></p>
+
 			</div>
 			<% }); %>
 		</div>

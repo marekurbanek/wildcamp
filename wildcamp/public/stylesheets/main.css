@@ -48,3 +48,7 @@ background: linear-gradient(to right, #E9E4F0, #D3CCE3); /* W3C, IE 10+/ Edge, F
 .margin-top{
 	margin-top: 60px;
 }
+
+#delete-form{
+	display: inline;
+}

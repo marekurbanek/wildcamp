@@ -10,10 +10,15 @@ var express					= require("express"),
 	methodOverride 			= require("method-override"),
 	Comment 				= require("./models/comment")
 
+var campingRoutes = require("./routes/campings"),
+	commentRoutes = require("./routes/comments"),
+	indexRoutes	  = require("./routes/index");
+
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
+
 
 mongoose.connect('mongodb://localhost/app');
 var db = mongoose.connection;
@@ -39,155 +44,9 @@ app.use(function(req, res, next){
     next();
 });
 
-function isLoggedIn(req, res, next){
-	if(req.isAuthenticated()){
-		return next();
-	}
-	res.redirect("/login");
-};
-
-app.get("/", function(req, res){
-	res.render("landing");
-});
-
-//===========================================================
-//			CAMPING ROUTES
-//===========================================================
-app.get("/campings", function(req, res){
-	Camping.find({}, function(err, allCampings){
-		if(err){
-			console.log(err);
-		} else{
-			res.render("campings/index", {camping: allCampings, currentUser: req.user});
-		}
-	});
-});
-
-app.get("/campings/new", function(req, res){
-	res.render("campings/new")
-});
-
-app.post("/campings", isLoggedIn, function(req, res){
-	var newCamping = req.body.camping;
-	Camping.create(newCamping, function(err, newCamp){
-		if(err){
-			console.log(err);
-		} else{
-			res.redirect("/campings");
-		}
-	});
-});
-app.get("/campings/:id", function(req, res){
-	Camping.findById(req.params.id).populate("comments").exec(function(err, foundCamp){
-		if(err){
-			console.log(err);
-		} else{
-			res.render("campings/show", {camping: foundCamp});
-		}
-	});
-});
-
-app.get("/campings/:id/edit",isLoggedIn, function(req, res){
-	Camping.findById(req.params.id, function(err, foundCamp){
-		if(err){
-			console.log(err);
-			res.send("I couldn't find that camp");
-		}else{
-			res.render("campings/edit", {camping: foundCamp});
-		}
-	})
-});
-
-app.put("/campings/:id", function(req, res){
-	Camping.findByIdAndUpdate(req.params.id, req.body.camping, function(err, updatedBlog){
-		if(err){
-			res.redirect("/campings")
-		}else{
-			res.redirect("/campings/" + req.params.id);
-		}
-	})
-});
-
-
-//===========================================================
-//			LOGIN ROUTES
-//===========================================================
-
-app.get("/register", function(req, res){
-	res.render("users/register")
-});
-
-app.post("/register", function(req, res){
-	var newUser = new User({username: req.body.username});
-	User.register(newUser, req.body.password, function(err, user){
-		if(err){
-			console.log(err);
-			return res.render("users/register");
-		}
-		passport.authenticate("local")(req, res, function(){
-			res.redirect("/campings");
-		});
-	});
-});
-app.get("/login", function(req, res){
-	res.render("users/login");
-});
-
-app.post("/login", passport.authenticate("local",
-	{
-		successRedirect: "/campings",
-		failureRedirect: "/login"
-	}), function(req, res){
-
-});
-
-app.get("/logout", function(req, res){
-	req.logout();
-	res.redirect("/campings");
-});
-
-//===========================================================
-//			COMMENTS ROUTES
-//===========================================================
-
-
-app.get("/campings/:id/comments/new", function(req, res){
-	Camping.findById(req.params.id, function(err, foundCamp){
-		if(err){
-			res.redirect("/campings")
-		} else{
-			res.render("comments/new", {camping: foundCamp});
-		}
-	});
-	
-});
-
-app.post("/campings/:id/comments", isLoggedIn, function(req, res){
-	Camping.findById(req.params.id, function(err, foundCamp){
-		if(err){
-			console.log(err);
-			res.redirect("/campings");
-		} else{
-			Comment.create(req.body.comment, function(err, comment){
-				if(err){
-					console.log(err);
-					res.redirect("/campings");
-				} else{
-					foundCamp.comments.push(comment);
-					foundCamp.save();
-					res.redirect("/campings/" + foundCamp._id);
-				}
-			}
-		)};
-	});
-});
-
-
-
-
-
-
-
+app.use("/", indexRoutes);
+app.use("/campings", campingRoutes);
+app.use("/campings/:id/comments", commentRoutes)
 
 app.listen(8080, function() {
 
