@@ -5,7 +5,7 @@ var express 	= require("express"),
 	middleware	= require("../middleware");
 
 
-router.get("/new", function(req, res){
+router.get("/new", middleware.isLoggedIn, function(req, res){
 	Camping.findById(req.params.id, function(err, foundCamp){
 		if(err){
 			res.redirect("/campings")

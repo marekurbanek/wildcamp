@@ -12,6 +12,7 @@ if(req.isAuthenticated()){
 				if(foundCamp.author.id.equals(req.user._id)){
 					next();
 				} else{
+					req.flash("error", "You don't have permission to do that!");
 					res.redirect("/campings/" + req.params.id);
 				}
 			}
@@ -33,6 +34,7 @@ middleWareObj.isAuthorizedComment = function(req, res, next){
 				if(foundComment.author.id.equals(req.user._id)){
 					next();
 				} else{
+					req.flash("error", "You don't have permission to do that!");
 					res.redirect("/campings/" + req.params.id);
 				};
 			};
@@ -46,5 +48,6 @@ middleWareObj.isLoggedIn = function(req, res, next){
 	if(req.isAuthenticated()){
 		return next();
 	}
+	req.flash("error", "Please Login first!");
 	res.redirect("/login");
 };

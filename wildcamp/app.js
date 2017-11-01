@@ -8,7 +8,8 @@ var express					= require("express"),
 	Camping 				= require("./models/camping"),
 	User					= require("./models/user"),
 	methodOverride 			= require("method-override"),
-	Comment 				= require("./models/comment")
+	Comment 				= require("./models/comment"),
+	flash					= require("connect-flash");
 
 var campingRoutes = require("./routes/campings"),
 	commentRoutes = require("./routes/comments"),
@@ -18,7 +19,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
-
+app.use(flash());
 
 mongoose.connect('mongodb://localhost/app');
 var db = mongoose.connection;
@@ -40,7 +41,9 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use(function(req, res, next){
-    res.locals.currentUser = req.user;
+    res.locals.currentUser  = req.user;
+    res.locals.error		= req.flash("error");
+    res.locals.success		= req.flash("success");
     next();
 });
 
