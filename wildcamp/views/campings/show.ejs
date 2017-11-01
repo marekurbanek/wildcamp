@@ -28,10 +28,12 @@
 				<h4><strong><%=comment.author.username%></strong></h4>
 				<hr>
 				<p><%=comment.text%></p>
+				<% if(currentUser && currentUser._id.equals(comment.author.id)){ %>
 				<a class="btn  btn-warning btn-xs" href="/campings/<%=camping._id%>/comments/<%=comment.id%>/edit">Edit</a>
 				<form id="delete-form" action="/campings/<%=camping._id%>/comments/<%=comment.id%>?_method=DELETE" method="POST">
 					<button class="btn btn-danger btn-xs">Delete</button>
 				</form>
+				<%};%>
 			</div>
 			<% }); %>
 		</div>

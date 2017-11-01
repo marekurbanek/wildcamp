@@ -1,7 +1,7 @@
 var express 	= require("express"),
 	router		= express.Router({mergeParams: true}),
-	Camping 	= require("../models/camping");
-
+	Camping 	= require("../models/camping"),
+	middleware	= require("../middleware");
 
 router.get("/", function(req, res){
 	Camping.find({}, function(err, allCampings){
@@ -13,7 +13,7 @@ router.get("/", function(req, res){
 	});
 });
 
-router.post("/", isLoggedIn, function(req, res){
+router.post("/", middleware.isLoggedIn, function(req, res){
 	var name = req.body.camping.name;
 	var image = req.body.camping.image;
 	var desc = req.body.camping.description;
@@ -33,7 +33,7 @@ router.post("/", isLoggedIn, function(req, res){
 	});
 });
 
-router.get("/new", isLoggedIn, function(req, res){
+router.get("/new", middleware.isLoggedIn, function(req, res){
 	res.render("campings/new")
 });
 
@@ -47,7 +47,7 @@ router.get("/:id", function(req, res){
 	});
 });
 
-router.get("/:id/edit",isAuthorizedCamp, function(req, res){
+router.get("/:id/edit", middleware.isAuthorizedCamp, function(req, res){
 	Camping.findById(req.params.id, function(err, foundCamp){
 		if(err){
 			console.log(err);
@@ -58,7 +58,7 @@ router.get("/:id/edit",isAuthorizedCamp, function(req, res){
 	});
 });
 
-router.put("/:id", isAuthorizedCamp, function(req, res){
+router.put("/:id", middleware.isAuthorizedCamp, function(req, res){
 	Camping.findByIdAndUpdate(req.params.id, req.body.camping, function(err, updatedBlog){
 		if(err){
 			res.redirect("/campings")
@@ -68,7 +68,7 @@ router.put("/:id", isAuthorizedCamp, function(req, res){
 	});
 });
 
-router.delete("/:id", isAuthorizedCamp, function(req, res){
+router.delete("/:id", middleware.isAuthorizedCamp, function(req, res){
 	Camping.findByIdAndRemove(req.params.id, function(err){
 		if(err){
 			res.redirect("/campings");
@@ -78,29 +78,7 @@ router.delete("/:id", isAuthorizedCamp, function(req, res){
 	});
 });
 
-function isLoggedIn(req, res, next){
-	if(req.isAuthenticated()){
-		return next();
-	}
-	res.redirect("/login");
-};
 
-function isAuthorizedCamp(req, res, next){
-	if(req.isAuthenticated()){
-		Camping.findById(req.params.id, function(err, foundCamp){
-			if(err){
-				res.redirect("/campings/" + req.params.id);
-				} else{
-				if(foundCamp.author.id.equals(req.user._id)){
-					next();
-				} else{
-					res.redirect("/campings/" + req.params.id);
-				}
-			}
-		});
-	}else{
-		res.redirect("/campings/" + req.params.id);
-	};
-};
+
 
 module.exports = router;
