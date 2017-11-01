@@ -47,7 +47,7 @@ router.get("/:id", function(req, res){
 	});
 });
 
-router.get("/:id/edit",isAuthorized, function(req, res){
+router.get("/:id/edit",isAuthorizedCamp, function(req, res){
 	Camping.findById(req.params.id, function(err, foundCamp){
 		if(err){
 			console.log(err);
@@ -58,7 +58,7 @@ router.get("/:id/edit",isAuthorized, function(req, res){
 	});
 });
 
-router.put("/:id", isAuthorized, function(req, res){
+router.put("/:id", isAuthorizedCamp, function(req, res){
 	Camping.findByIdAndUpdate(req.params.id, req.body.camping, function(err, updatedBlog){
 		if(err){
 			res.redirect("/campings")
@@ -68,9 +68,9 @@ router.put("/:id", isAuthorized, function(req, res){
 	});
 });
 
-router.delete("/:id", isAuthorized, function(req, res){
+router.delete("/:id", isAuthorizedCamp, function(req, res){
 	Camping.findByIdAndRemove(req.params.id, function(err){
-		if(err){s
+		if(err){
 			res.redirect("/campings");
 		} else{
 			res.redirect("/campings");
@@ -85,7 +85,7 @@ function isLoggedIn(req, res, next){
 	res.redirect("/login");
 };
 
-function isAuthorized(req, res, next){
+function isAuthorizedCamp(req, res, next){
 	if(req.isAuthenticated()){
 		Camping.findById(req.params.id, function(err, foundCamp){
 			if(err){

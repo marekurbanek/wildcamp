@@ -1,0 +1,18 @@
+<%  include ../partials/header %>
+
+<div class="container-fluid text-center">
+	<div class="row">
+		<div class="col-md-6 offset-md-3">
+			<form action="/campings/<%=camping%>/comments/<%=comment._id%>?_method=PUT" method="POST">
+				<div class="form-group">
+			   		<input class="form-control" type="text" name="comment[text]" value="<%=comment.text%>">
+			   	</div>
+			    <button type="submit" class="btn btn-success">Add a comment!</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+
+<%  include ../partials/footer %>
