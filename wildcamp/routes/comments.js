@@ -3,7 +3,7 @@ var express 	= require("express"),
 	Camping 	= require("../models/camping"),
 	Comment 	= require("../models/comment"),
 	middleware	= require("../middleware");
-
+const { check, validationResult } = require('express-validator/check');
 
 router.get("/new", middleware.isLoggedIn, function(req, res){
 	Camping.findById(req.params.id, function(err, foundCamp){
@@ -16,7 +16,17 @@ router.get("/new", middleware.isLoggedIn, function(req, res){
 	
 });
 
-router.post("/", middleware.isLoggedIn, function(req, res){
+router.post("/", middleware.isLoggedIn, [
+	check('comment.text', "Comment can't be blank").isLength({min: 1})
+	],function(req, res){
+		const errors = validationResult(req);
+		if(!errors.isEmpty()){
+			var message = errors.array().map(function (elem){
+				return elem.msg;
+			});
+			req.flash("error", message);
+			return res.redirect("/campings/" + req.params.id);
+	}
 	Camping.findById(req.params.id, function(err, foundCamp){
 		if(err){
 			console.log(err);

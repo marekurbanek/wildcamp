@@ -2,6 +2,8 @@ var express 	= require("express"),
 	router		= express.Router({mergeParams: true}),
 	Camping 	= require("../models/camping"),
 	middleware	= require("../middleware");
+const { check, validationResult } = require('express-validator/check');
+
 
 router.get("/", function(req, res){
 	Camping.find({}, function(err, allCampings){
@@ -13,7 +15,19 @@ router.get("/", function(req, res){
 	});
 });
 
-router.post("/", middleware.isLoggedIn, function(req, res){
+router.post("/", middleware.isLoggedIn, [
+	check('camping.name', "Name must be at leat 5 chars long").isLength({min: 5}),
+	check('camping.image', "You have to upload an image").isLength({min: 5}),
+	check('camping.description', "Description can't be blank").isLength({min: 1})
+	], function(req, res){
+	const errors = validationResult(req);
+	if(!errors.isEmpty()){
+		var message = errors.array().map(function (elem){
+			return elem.msg;
+		});
+		req.flash("error", message);
+		return res.redirect("/campings");
+	}
 	var name = req.body.camping.name;
 	var image = req.body.camping.image;
 	var desc = req.body.camping.description;

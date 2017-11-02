@@ -7,7 +7,7 @@ var express					= require("express"),
 	passportLocalMongoose	= require("passport-local-mongoose"),
 	Camping 				= require("./models/camping"),
 	User					= require("./models/user"),
-	methodOverride 			= require("method-override"),
+	methodOverride 			= require("method-override"), 
 	Comment 				= require("./models/comment"),
 	flash					= require("connect-flash");
 
@@ -29,7 +29,7 @@ db.once('open', function() {
 
 //PASSPORT CONFIGURATION
 app.use(require("express-session")({
-    secret: "Once again Rusty wins cutest dog",
+    secret: "Secret",
     resave: false,
     saveUninitialized: false
 }));
