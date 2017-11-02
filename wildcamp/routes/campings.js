@@ -21,8 +21,10 @@ router.post("/", middleware.isLoggedIn, function(req, res){
 		id: req.user._id,
 		username: req.user.username
 	}
+	var lat = req.body.camping.lat;
+	var lng = req.body.camping.lng;
 
-	var newCamping = {name: name, image: image, description: desc, author: author};
+	var newCamping = {name: name, image: image, description: desc, author: author, lat: lat, lng: lng};
 
 	Camping.create(newCamping, function(err, newCamp){
 		if(err){

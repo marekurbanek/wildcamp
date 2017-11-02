@@ -52,3 +52,8 @@ background: linear-gradient(to right, #E9E4F0, #D3CCE3); /* W3C, IE 10+/ Edge, F
 #delete-form{
 	display: inline;
 }
+
+#map{
+	height: 300px;
+	width: 100%;,
+}

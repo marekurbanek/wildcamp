@@ -8,6 +8,9 @@
 			<h3 class="text-center"><%=camping.name %></h3>
 			<hr>
 			<p><%= camping.description%></p>
+			<% if(camping.lat && camping.lng >0){ %>
+			<div id="map">Map: </div>
+			<% }; %>
 			<p><em>Created by: <%=camping.author.username%></em></p>
 			<% if(currentUser && camping.author.id.equals(currentUser._id)){ %>
 				<hr>
@@ -39,5 +42,22 @@
 		</div>
 	</div>
 </div>
+
+<script>
+  function initMap() {
+    var uluru = {lat: <%=camping.lat%>, lng: <%=camping.lng%>};
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 4,
+      center: uluru
+    });
+    var marker = new google.maps.Marker({
+      position: uluru,
+      map: map
+    });
+  }
+</script>
+ <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBnvlOyMCvCtFrYbI2vSsiixAGu7sMY38&callback=initMap">
+ </script>
 
 <% include ../partials/footer %>

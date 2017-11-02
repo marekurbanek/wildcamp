@@ -4,6 +4,8 @@ var campingSchema = new mongoose.Schema({
 	name: String,
 	image: String,
 	description: String,
+	lat: String,
+	lng: String,
 	author: {
 		id: {
 			type: mongoose.Schema.Types.ObjectId,
