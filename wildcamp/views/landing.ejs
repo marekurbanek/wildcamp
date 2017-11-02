@@ -1,20 +1,24 @@
-<%  include ./partials/header %>
-
-
-<div class="container-fluid no-padding no-margin">
-
-	<div class="row bgimg img-responsive no-padding no-margin">
-		<div class="container">
-			<div class="col-md-6">
-				<div class="welcome">
-					<h3 class="no-opacity">Welcome to the Wild Camp!</h3> 
-					<h4 class="no-opacity">Here you can share and explore the most beautiful places for wild camping.</h4>
-					<hr>
-					<h5 class="no-opacity">To add new places please <a class="no-opacity btn btn-primary" href="/register" class="link">Sign Up</a> or if you allready have an account <a class="no-opacity btn btn-success" href="/login" class="link">Login</a></h5>
-				</div>
-			</div>	
-		</div>
-	</div>
-	
-</div>
-<% include ./partials/footer %>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>WildCamp</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/stylesheets/landing.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js" type="text/javascript" async></script>
+    </head>
+    <body>
+      
+    <div id="landing-header">
+ 		<h1>Welcome to WildCamp!</h1>
+		<a href="/campings" class="btn btn-lg btn-success">Explore all wild campings</a>
+    </div>
+    
+    <ul class="slideshow">
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
+ 
+<% include partials/footer %>
