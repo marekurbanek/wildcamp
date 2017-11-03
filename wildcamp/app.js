@@ -21,7 +21,7 @@ app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 app.use(flash());
 
-mongoose.connect('mongodb://localhost/app');
+mongoose.connect('mongodb://orzechon:password@ds245885.mlab.com:45885/wildcamp');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {

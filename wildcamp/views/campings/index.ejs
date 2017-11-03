@@ -3,19 +3,11 @@
 <div class="row">
 		<div class="container-fluid">
 			<div class="jumbotron">
-			<h1 class="display-3">Welcome to the wild camps!</h1>
-		<!-- 		<div class="row">
-					<div class="col-md-7">
-						
-					</div>
-					<div class="col-md-5">
-						<img class="header-photo" src="http://photosforclass.com/download/1430198323">
-					</div>
-				</div> -->
-			  <p class="lead">Here you can find the best wild camping spots on the planet!</p>
-			  <hr class="my-4">
-			  <p>If You'd like, You can add your own camping spot to help our community.</p>
-			  <a class="btn btn-lg btn-primary" href="campings/new">Add new wild camping spot</a>
+				<h1 class="display-3">Welcome to the wild camps!</h1>
+				<p class="lead">Here you can find the best wild camping spots on the planet!</p>
+				<hr class="my-4">
+				<p>If You'd like, You can add your own camping spot to help our community.</p>
+				<a class="btn btn-lg btn-primary" href="campings/new">Add new wild camping spot</a>
 			</div>
 		</div>
 
@@ -23,15 +15,14 @@
 <div class="row text-center" id="wraping">
  <% camping.forEach(function(camp){ %>
 	<div class="col-md-4 col-sm-6">
-		<div class="img-thumbnail">
-			<div class="caption">
-				<h4><%= camp.name %></h4>
+			<div class="img-thumbnail">
+				<a class="no-decoration" href="/campings/<%= camp._id%>">
+					<div class="caption">
+						<h4><%= camp.name %></h4>
+					</div>
+					<img class="img-responsive rounded" src="<%= camp.image %>">
+				</a>
 			</div>
-			<a href="/campings/<%= camp._id%>">
-				<img class="img-responsive rounded" src="<%= camp.image %>">
-			</a>		
-			
-		</div>
 	</div>
 <% }); %> 
 </div>

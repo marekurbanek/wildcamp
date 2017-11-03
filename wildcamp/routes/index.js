@@ -38,6 +38,10 @@ router.get("/logout", function(req, res){
 	res.redirect("/campings");
 });
 
+router.get("/about", function(req, res){
+	res.render("about");
+});
+
 router.get("/", function(req, res){
 	res.render("landing");
 });
