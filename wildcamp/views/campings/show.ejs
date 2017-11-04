@@ -8,7 +8,7 @@
 			<h3 class="text-center"><%=camping.name %></h3>
 			<hr>
 			<p><%= camping.description%></p>
-			<% if(camping.lat && camping.lng >0){ %>
+			<% if(camping.lat.length && camping.lng.length >0){ %>
 			<div id="map">Map: </div>
 			<% }; %>
 			<p><em>Created by: <%=camping.author.username%></em></p>

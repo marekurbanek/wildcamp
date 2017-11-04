@@ -18,15 +18,19 @@ router.get("/", function(req, res){
 router.post("/", middleware.isLoggedIn, [
 	check('camping.name', "Name must be at leat 5 chars long").isLength({min: 5}),
 	check('camping.image', "You have to upload an image").isLength({min: 5}),
-	check('camping.description', "Description can't be blank").isLength({min: 1})
+	check('camping.description', "Description can't be blank").isLength({min: 1}),
+	check('camping.lat', "Latitude must be number").isDecimal(),
+	check('camping.lng', "Longitude must be number").isDecimal()
 	], function(req, res){
 	const errors = validationResult(req);
 	if(!errors.isEmpty()){
 		var message = errors.array().map(function (elem){
 			return elem.msg;
 		});
+		var camp = req.body.camping;
+		console.log(camp);
 		req.flash("error", message);
-		return res.redirect("/campings");
+		return res.render("campings/new", {camping: camp, message: message});
 	}
 	var name = req.body.camping.name;
 	var image = req.body.camping.image;
@@ -50,7 +54,7 @@ router.post("/", middleware.isLoggedIn, [
 });
 
 router.get("/new", middleware.isLoggedIn, function(req, res){
-	res.render("campings/new")
+	res.render("campings/new");
 });
 
 router.get("/:id", function(req, res){
@@ -94,7 +98,8 @@ router.delete("/:id", middleware.isAuthorizedCamp, function(req, res){
 	});
 });
 
-
-
+function isNumeric(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+};
 
 module.exports = router;

@@ -51,7 +51,7 @@ app.use("/", indexRoutes);
 app.use("/campings", campingRoutes);
 app.use("/campings/:id/comments", commentRoutes)
 
-app.listen(process.env.PORT, process.env.IP, function() {
+app.listen(8080, function() {
 
     // Callback called when server is listening
     console.log("Server listening on: http://localhost:%s8080");

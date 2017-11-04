@@ -1,22 +1,43 @@
 <%  include ../partials/header %>
 	<div class="container-fluid">
+	<% if(typeof message !== 'undefined') { %>
+		<div class="alert alert-danger" role="alert">
+	    	<%=message%>
+	  	</div>
+  	<% } %>
 		<div class="row">
 			<div class="col-md-6 offset-md-3 margin-top">
 				<form id="campingForm" action="/campings" method="POST">
 					<div class="form-group">
-						<input class="form-control" type="text" name="camping[name]" placeholder="name">
+						<input class="form-control" type="text" name="camping[name]" placeholder="name" 
+						<% if(typeof camping !== 'undefined'){ %>
+						value="<%=camping.name%>"
+						<% } %>
+						>
 					</div>
 					<div class="form-group">
-						<input class="form-control" type="text" name="camping[image]" placeholder="image url">
+						<input class="form-control" type="text" name="camping[image]" placeholder="image url"
+						<% if(typeof camping !== 'undefined'){ %>
+						value="<%=camping.image%>"
+						<% } %>
+						>
 					</div>
 					<div class="form-group">
-						<textarea class="form-control" name="camping[description]"></textarea>
+						<textarea class="form-control" name="camping[description]"><% if(typeof camping !== 'undefined'){ %><%=camping.description%><% } %></textarea>
 					</div>
 					<div class="form-group">
-						<input class="form-control" type="text" name="camping[lat]" placeholder="latitude">
+						<input class="form-control" type="text" name="camping[lat]" placeholder="latitude"
+						<% if(typeof camping !== 'undefined'){ %>
+						value="<%=camping.lat%>"
+						<% } %>
+						>
 					</div>
 					<div class="form-group">
-						<input class="form-control" type="text" name="camping[lng]" placeholder="latitude">
+						<input class="form-control" type="text" name="camping[lng]" placeholder="longitude"
+						<% if(typeof camping !== 'undefined'){ %>
+						value="<%=camping.lng%>"
+						<% } %>
+						>
 					</div>
 					<input class="btn btn-lg btn-success"type="submit" value="Submit!">
 				</form>

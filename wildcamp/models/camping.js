@@ -21,4 +21,5 @@ var campingSchema = new mongoose.Schema({
 	]
 });
 
+
 module.exports = mongoose.model("Camping", campingSchema);

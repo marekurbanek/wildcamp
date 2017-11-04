@@ -3,11 +3,24 @@ var express 	= require("express"),
 	User 		= require("../models/user"),
 	passport	= require("passport")
 
+const { check, validationResult } = require('express-validator/check');
+
 router.get("/register", function(req, res){
 	res.render("users/register")
 });
 
-router.post("/register", function(req, res){
+router.post("/register", [
+	check("username", "Username must be at least 5 chars long").isLength({min: 5}),
+	check("password", "Password must be at least 5 chars long").isLength({min: 5})
+	] ,function(req, res){
+		const errors = validationResult(req);
+		if(!errors.isEmpty()){
+			var message = errors.array().map(function (elem){
+				return elem.msg;
+			});
+			req.flash("error", message);
+			return res.redirect("/register");
+		}
 	var newUser = new User({username: req.body.username});
 	User.register(newUser, req.body.password, function(err, user){
 		if(err){
