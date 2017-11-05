@@ -72,3 +72,16 @@
 	max-width: 90%;
 	max-height: 100%;
 }
+
+.hide{
+	display: none;
+}
+
+.comment{
+	padding: 40px;
+}
+
+.center{
+	display: block;
+	margin: auto;
+}
