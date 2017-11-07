@@ -1,7 +1,8 @@
 var middleWareObj = {};
 
 var Camping 	= require("../models/camping"),
-	Comment 	= require("../models/comment");
+	Comment 	= require("../models/comment"),
+	User 		= require("../models/user");
 
 middleWareObj.isAuthorizedCamp = function(req, res, next){
 if(req.isAuthenticated()){
@@ -42,6 +43,27 @@ middleWareObj.isAuthorizedComment = function(req, res, next){
 	} else {
 		res.redirect("/campings/" + req.params.id);
 	};
+};
+
+middleWareObj.isAuthorizedUser = function(req, res, next){
+	if(req.isAuthenticated()){
+		User.findById(req.params.user_id, function(err, foundUser){
+			if(err){
+				console.log(err);
+				res.redirect("/users");
+			} else{
+				if(req.user._id.equals(foundUser.id)){
+					next();
+				} else{
+					req.flash("error", "You don't have permission to do that!");
+					res.redirect("/users");
+				}
+			}
+		});
+	} else{
+		req.flash("error", "Please Login first!");
+		res.redirect("/login");
+	}
 };
 
 middleWareObj.isLoggedIn = function(req, res, next){

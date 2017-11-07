@@ -8,7 +8,6 @@ router.get("/", function(req, res){
 		if(err){
 			res.redirect("/campings");
 		} else{
-			console.log(foundUsers);
 			res.render("users/index", {users: foundUsers});
 		}
 	});
@@ -24,17 +23,7 @@ router.get("/:user_id", function(req, res){
 	});
 });
 
-router.get("/:user_id/edit", function(req, res){
-	User.findById(req.params.user_id, function(err, foundUser){
-		if(err){
-			res.redirect("/campings");
-		} else{
-			res.render("users/edit", {user: foundUser});
-		}
-	});
-});
-
-router.post("/:user_id", function(req, res){
+router.post("/:user_id", middleware.isAuthorizedUser, function(req, res){
 	if(!req.files){
 		return res.status(400).send('No files were uploaded.');
 	} else{
@@ -50,13 +39,35 @@ router.post("/:user_id", function(req, res){
 
 });
 
-router.put("/:user_id", function(req, res){
+router.get("/:user_id/edit", middleware.isAuthorizedUser, function(req, res){
+	User.findById(req.params.user_id, function(err, foundUser){
+		if(err){
+			res.redirect("/campings");
+		} else{
+			res.render("users/edit", {user: foundUser});
+		}
+	});
+});
+
+router.put("/:user_id", middleware.isAuthorizedUser, function(req, res){
 	User.findByIdAndUpdate(req.params.user_id, req.body.user, function(err, updatedUser){
 		if(err){
 			console.log(err);
 			res.redirect("/campings");
 		} else{
 			res.redirect("/users/" + req.params.user_id);
+		}
+	});
+});
+
+router.delete("/:user_id", middleware.isAuthorizedUser, function(req, res){
+	User.findByIdAndRemove(req.params.user_id, function(err, deletedUser){
+		if(err){
+			console.log(err);
+			res.redirect("/users");
+		} else{
+			req.flash("success", "You have deleted Your account successfully");
+			res.redirect("/users");
 		}
 	});
 });
