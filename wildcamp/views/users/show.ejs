@@ -1,0 +1,50 @@
+<%  include ../partials/header %>
+
+<div class="container margin-top">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="row">
+				<div class="col-md-4 center text-center">
+					<h1><strong><%=user.username%></strong></h1>
+						<div class="mb-3">
+							<img class="avatar center" src="/users/images/<%=user._id%>.jpg">
+								<form class="form-group" id="userForm" action="/users/<%=user._id%>" method="POST" encType="multipart/form-data">
+									<div class="form-group">
+										<input class="form-control" type="file" name="image">
+										<input class="btn" type="submit">
+									</div>
+							</form>
+						</div>
+					</div>
+				<div class="col-md-8 text-center">
+					<h3>Camping Count:</h3>
+					<h1><strong><%=campingCount%></strong></h1>
+					<h4 class="text-center">Email</h4>
+						<%=user.email%>
+					<h4 class="text-center">Description:</h4>
+						<%=user.description%><br>
+					<a href="/users/<%=user._id%>/edit" class="btn btn-warning btn-lg">Edit</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<h2 class="text-center">User campings:</h2>
+	<div class="row text-center" id="wraping">
+	 <% user.campings.forEach(function(camp){ %>
+		<div class="col-md-6 col-sm-6">
+				<div class="img-thumbnail">
+					<a class="no-decoration" href="/campings/<%= camp._id%>">
+						<div class="caption">
+							<h4><%= camp.name %></h4>
+						</div>
+						<img class="img-responsive rounded" src="<%= camp.image %>">
+					</a>
+				</div>
+		</div>
+	<% }); %> 
+	</div>
+</div>
+
+<% include ../partials/footer %>
+

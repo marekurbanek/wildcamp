@@ -9,17 +9,20 @@ var express					= require("express"),
 	User					= require("./models/user"),
 	methodOverride 			= require("method-override"), 
 	Comment 				= require("./models/comment"),
-	flash					= require("connect-flash");
+	flash					= require("connect-flash"),
+	fileUpload				= require("express-fileupload");
 
 var campingRoutes = require("./routes/campings"),
 	commentRoutes = require("./routes/comments"),
-	indexRoutes	  = require("./routes/index");
+	indexRoutes	  = require("./routes/index"),
+	userRoutes	  = require("./routes/users")
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 app.use(flash());
+app.use(fileUpload());
 
 mongoose.connect('mongodb://orzechon:password@ds245885.mlab.com:45885/wildcamp');
 var db = mongoose.connection;
@@ -49,7 +52,12 @@ app.use(function(req, res, next){
 
 app.use("/", indexRoutes);
 app.use("/campings", campingRoutes);
-app.use("/campings/:id/comments", commentRoutes)
+app.use("/campings/:id/comments", commentRoutes);
+app.use("/users", userRoutes);
+
+app.all('*', function(req, res) {
+  res.redirect("/campings");
+});
 
 app.listen(8080, function() {
 

@@ -1,6 +1,7 @@
 var express 	= require("express"),
 	router		= express.Router({mergeParams: true}),
 	Camping 	= require("../models/camping"),
+	User 		= require("../models/user"),
 	middleware	= require("../middleware");
 const { check, validationResult } = require('express-validator/check');
 
@@ -44,13 +45,23 @@ router.post("/", middleware.isLoggedIn, [
 
 	var newCamping = {name: name, image: image, description: desc, author: author, lat: lat, lng: lng};
 
-	Camping.create(newCamping, function(err, newCamp){
+	User.findById(req.user._id, function(err, foundUser){
 		if(err){
-			console.log(err);
+			res.redirect("/login");
 		} else{
-			res.redirect("/campings");
-		}
+			Camping.create(newCamping, function(err, camping){
+			if(err){
+				console.log(err);
+			} else{
+				camping.save();
+				foundUser.campings.push(camping);
+				foundUser.save();
+				res.redirect("/campings" + camping.id);
+			}
+		});
+		};
 	});
+	
 });
 
 router.get("/new", middleware.isLoggedIn, function(req, res){
@@ -60,7 +71,7 @@ router.get("/new", middleware.isLoggedIn, function(req, res){
 router.get("/:id", function(req, res){
 	Camping.findById(req.params.id).populate("comments").exec(function(err, foundCamp){
 		if(err){
-			console.log(err);
+			res.redirect("/campings");
 		} else{
 			res.render("campings/show", {camping: foundCamp});
 		}
@@ -79,7 +90,7 @@ router.get("/:id/edit", middleware.isAuthorizedCamp, function(req, res){
 });
 
 router.put("/:id", middleware.isAuthorizedCamp, function(req, res){
-	Camping.findByIdAndUpdate(req.params.id, req.body.camping, function(err, updatedBlog){
+	Camping.findByIdAndUpdate(req.params.id, req.body.camping, function(err, updatedCamp){
 		if(err){
 			res.redirect("/campings")
 		}else{

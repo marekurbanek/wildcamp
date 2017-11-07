@@ -1,0 +1,25 @@
+<%  include ../partials/header %>
+<div class="container-fluid">
+	<h1 class="text-center">Our Community!</h1>
+	<div class="row text-center" id="wraping">
+		 <% users.forEach(function(user){ %>
+			<div class="col-md-4 col-sm-6">
+					<div class="img-thumbnail">
+						<a class="no-decoration" href="/users/<%= user._id%>">
+							<div class="caption">
+								<%console.log(user)%>
+								<h4><%= user.username %></h4>
+							</div>
+							<img class="img-responsive rounded avatar-small" src="images/<%=user._id%>.jpg">
+							
+						</a>
+					</div>
+			</div>
+		<% }); %> 
+	</div>
+</div>
+
+<% users.forEach(function(user){ %>
+ <h4><%= user.usernamename %></h4>
+<% }); %> 
+<% include ../partials/footer %>

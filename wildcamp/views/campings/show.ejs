@@ -11,7 +11,7 @@
 			<% if(camping.lat.length && camping.lng.length >0){ %>
 			<div id="map">Map: </div>
 			<% }; %>
-			<p><em>Created by: <%=camping.author.username%></em></p>
+			<p><em>Created by: <a href="/users/<%=camping.author.id%>"><%=camping.author.username%></a></em></p>
 			<% if(currentUser && camping.author.id.equals(currentUser._id)){ %>
 				<hr>
 				<a class="btn  btn-warning btn-xs" href="/campings/<%=camping._id%>/edit">Edit</a>
@@ -42,7 +42,11 @@
 			<% camping.comments.forEach(function(comment){ %>
 				<div class="col-md-12">
 					<div class="img-thumbnail">
-						<h4><strong><%=comment.author.username%></strong></h4><hr>
+						<h4><strong><a href="/users/<%=comment.author.id%>">
+										<%=comment.author.username%>
+									</a>
+							</strong>
+						</h4><hr>
 						<p><%=comment.text%></p>
 						<% if(currentUser && currentUser._id.equals(comment.author.id)){ %>
 							<a class="btn  btn-warning btn-xs" href="/campings/<%=camping._id%>/comments/<%=comment.id%>/edit">	Edit
@@ -71,9 +75,9 @@
     });
   }
 </script>
- <script async defer
+<script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBnvlOyMCvCtFrYbI2vSsiixAGu7sMY38&callback=initMap">
- </script>
- <script src="/scripts/comments.js"></script>
+</script>
+<script src="/scripts/comments.js"></script>
 
 <% include ../partials/footer %>
